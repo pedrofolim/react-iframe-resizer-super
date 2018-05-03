@@ -99,7 +99,7 @@ class IframeResizer extends React.Component {
     const frame = this.refs.frame;
     if (!frame) return;
     if (iframeResizerEnableRetry) {      
-      backoff(this.resizeIframe(this.props), props.iframeResizerOptions.retries, props.iframeResizerOptions.delay);
+      backoff(iframeResizerLib(props.iframeResizerOptions, frame), props.iframeResizerOptions.retries, props.iframeResizerOptions.delay);
     } else if (props.iframeResizerEnable){
       iframeResizerLib(props.iframeResizerOptions, frame);
     }

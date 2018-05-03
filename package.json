@@ -1,10 +1,10 @@
 {
-  "name": "react-iframe-resizer-super",
-  "version": "0.2.0",
+  "name": "quarks-ui-iframe-resizer",
+  "version": "0.0.1",
   "description": "React Iframe Resizer With Super-Powers (cross domain, resize, etc)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zeroasterisk/react-iframe-resizer-super.git"
+    "url": "git+https://github.com/pedrofolim/react-iframe-resizer-super.git"
   },
   "license": "MIT",
   "scripts": {
@@ -56,5 +56,13 @@
   "main": "dist/index.js",
   "engines": {
     "npm": "^3.0.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/pedrofolim/react-iframe-resizer-super/issues"
+  },
+  "homepage": "https://github.com/pedrofolim/react-iframe-resizer-super#readme",
+  "keywords": [
+    "iframe"
+  ],
+  "author": "pedro.folim"
 }
