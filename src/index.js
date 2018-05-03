@@ -9,6 +9,13 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { iframeResizer as iframeResizerLib } from 'iframe-resizer';
 
+const pause = (duration) => new Promise(res => setTimeout(res, duration));
+                                            
+const backoff = (fn, retries, delay) =>
+      fn().then(msg => retries > 1
+        ? pause(delay).then(() => backoff(retries - 1, fn, delay * 2)) 
+        : Promise.reject(err));
+
 class IframeResizer extends React.Component {
   componentDidMount() {
     // can't update until we have a mounted iframe
@@ -91,10 +98,13 @@ class IframeResizer extends React.Component {
   resizeIframe = (props) => {
     const frame = this.refs.frame;
     if (!frame) return;
-    if (props.iframeResizerEnable) {
+    if (iframeResizerEnableRetry) {      
+      backoff(this.resizeIframe(this.props), props.iframeResizerOptions.retries, props.iframeResizerOptions.delay);
+    } else if (props.iframeResizerEnable){
       iframeResizerLib(props.iframeResizerOptions, frame);
     }
   }
+
   render() {
     const { src, id, frameBorder, className, style } = this.props;
     return (
@@ -121,6 +131,7 @@ IframeResizer.propTypes = {
   src: PropTypes.string,
   // iframe-resizer controls and helpers
   iframeResizerEnable: PropTypes.bool,
+  iframeResizerEnableRetry: PropTypes.bool,
   iframeResizerOptions: PropTypes.object,
   iframeResizerUrl: PropTypes.oneOfType([
     PropTypes.string, // URL to inject
@@ -137,6 +148,7 @@ IframeResizer.propTypes = {
 IframeResizer.defaultProps = {
   // resize iframe
   iframeResizerEnable: true,
+  iframeResizerEnableRetry: false,
   iframeResizerOptions: {
     // log: true,
     // autoResize: true,
@@ -145,6 +157,8 @@ IframeResizer.defaultProps = {
     // heightCalculationMethod: 'max',
     // initCallback: () => { console.log('ready!'); },
     // resizedCallback: () => { console.log('resized!'); },
+    retries: 3,
+    delay: 500
   },
   iframeResizerUrl: 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.8/iframeResizer.contentWindow.min.js',
   // misc props to pass through to iframe
